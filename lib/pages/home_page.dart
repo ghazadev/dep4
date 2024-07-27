@@ -93,12 +93,15 @@ class _HomeState extends State<Home> {
     if (newExpenseNameController.text.isNotEmpty &&
         newExpenseDollarAmountController.text.isNotEmpty &&
         newExpenseCentsAmountController.text.isNotEmpty) {
-      // Ensure dollar and cents inputs are valid numbers
+
       double? dollars = double.tryParse(newExpenseDollarAmountController.text);
       double? cents = double.tryParse(newExpenseCentsAmountController.text);
 
       if (dollars == null || cents == null) {
-        // Handle error: invalid number format
+        // Handle invalid input
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid dollar or cents input')),
+        );
         return;
       }
 
@@ -110,9 +113,9 @@ class _HomeState extends State<Home> {
       );
 
       Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+      Navigator.of(context).pop(); // Close the dialog after saving
+      clear();
     }
-    Navigator.of(context).pop(); // Close the dialog after saving
-    clear();
   }
 
   void cancel() {
